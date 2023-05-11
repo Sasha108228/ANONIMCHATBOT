@@ -11,7 +11,7 @@ from aiogram.utils.markdown import quote_html
 
 # @dp.message_handler(ISPrivate(), lambda message: message.text == "Жалоба ⚠️")
 async def claim(message: types.Message):
-    if db.get_block == 0:
+    if db.get_block(message.from_user.id) == 0:
         chat = db.get_chat(message.from_user.id)
 
         await message.answer("""Введите причину жалобы! \n
