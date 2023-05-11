@@ -126,7 +126,7 @@ async def no_photo(message: types.Message):
 # @dp.calback_query_handler(text='quit', state=[FCMAiling.text, FCMAiling.photo, FCMAiling.state])
 async def quit(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
-    await call.message.answer('Жалоба отменена')
+    await bot.send_message(call.from_user.id, 'Жалоба отменена', reply_markup=navs.disconnected)
 
 
 #Регистрируем хендлеры
