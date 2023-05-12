@@ -12,10 +12,9 @@ import config as con
 # @dp.message_handler(commands = ['start'], state = None)
 async def start(message: types.Message):
     if message.chat.type == 'private':
-        if db.get_block(message.from_user.id) == 0:
-
-            if(not db.user_exists(message.from_user.id)):
+        if(not db.user_exists(message.from_user.id)):
                 if await check_sub_channels(con.CHANNELS, message.from_user.id):
+                    db.null_block(message.from_user.id)
                     db.add_user(message.from_user.id)
                     db.null_like_dislike(message.from_user.id)
                     await FSMWelcome.name.set()
@@ -25,11 +24,13 @@ async def start(message: types.Message):
 
                 else:
                     await bot.send_message(message.from_user.id, con.NOT_SUB_MESSAGE, reply_markup=navs.showChannels())
-            else:
+        else:
+            if(not db.get_block(message.from_user.id)):
                 await message.answer(" Привет, я Анонимный ЧатБот!")
                 await message.answer(" Пожалуйста нажмите на кнопку для поиска нового собеседника", reply_markup=nav.find_partner)
-        else:
-            await bot.send_message(message.from_user.id, "Вы заблокированы!")
+            else:
+                await bot.send_message(message.from_user.id, "Вы заблокированы!")
+
     else:
         await bot.send_message(message.from_user.id, 'Бот работает только в приватных чатах!')
 

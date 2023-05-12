@@ -22,14 +22,13 @@ from aiogram.dispatcher import FSMContext
 # @dp.message_handler(lambda message: message.text == "Искаль партёра 🔍")
 async def find__partner(message: types.Message):
     if message.chat.type == 'private':
-
-        if db.get_block(message.from_user.id) == 0:
+        if(not db.get_block(message.from_user.id)):
             partner = db.get_queue()
 
             if db.create_chat(message.from_user.id, partner) is False:
-                    db.add_queue(message.from_user.id)
+                db.add_queue(message.from_user.id)
 
-                    await message.answer("Поиск парнёра...", reply_markup=nav.stop_searching)
+                await message.answer("Поиск парнёра...", reply_markup=nav.stop_searching)
 
             else:
                 num_chats_p = db.get_num_chats(partner)
@@ -50,7 +49,6 @@ async def find__partner(message: types.Message):
                 await bot.send_message(partner, "Оцените парнёра", reply_markup = rate.rating_markup)
         else:
             await bot.send_message(message.from_user.id, "Вы заблокированы!")
-            print(block)
     else:
         await message.answer("Бот работает только в приватных чатах!")
 
@@ -104,7 +102,7 @@ async def process_callback_rating(callback_query: types.CallbackQuery, state: FS
 # @dp.message_handler(lambda message: message.text == "Отключиться 🚫")
 async def disconnected(message: types.Message):
     if message.chat.type == 'private':
-        if db.get_block(message.from_user.id) == 0:
+        if(not db.get_block(message.from_user.id)):
 
             chat = db.get_chat(message.from_user.id)
 
@@ -128,7 +126,7 @@ async def disconnected(message: types.Message):
 # @dp.message_handler(lambda message: message.text == "Остановить поиск ❌")
 async def stop_searching(message: types.Message):
     if message.chat.type == 'private':
-        if db.get_block(message.from_user.id) == 0:
+        if(not db.get_block(message.from_user.id)):
 
             db.delete_queue(message.from_user.id)
             await message.answer("Поиск остановлен!", reply_markup=nav.find_partner)

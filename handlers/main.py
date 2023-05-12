@@ -12,7 +12,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 
 # @dp.message_handler(lambda message: message.text == "Главная 📝")
 async def main(message: types.Message):
-	if db.get_block(message.from_user.id) == 0:
+	if(not db.get_block(message.from_user.id)):
 
 		chat = db.get_chat(message.from_user.id)
 
