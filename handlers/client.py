@@ -47,6 +47,8 @@ async def find__partner(message: types.Message):
                 await bot.send_message(partner, "Вы подключились к чату!", reply_markup=nav.disconnected)
                 await bot.send_message(partner, con.questionnaire(message.from_user.id))
                 await bot.send_message(partner, "Оцените парнёра", reply_markup = rate.rating_markup)
+
+
         else:
             await bot.send_message(message.from_user.id, "Вы заблокированы!")
     else:
@@ -141,9 +143,14 @@ async def stop_searching(message: types.Message):
 
 #----------------------------------------------------------------------------------------------------------------
 
-# else:
-#     chat = db.get_chat(message.chat.id)
-#     await bot.send_message(chat[1], message.text)
+
+# @dp.message_handler()
+async def message_handler(message: types.Message):
+    chat = db.get_chat(message.chat.id)
+    try:
+        await bot.send_message(chat[1], message.text)
+    except Exception as e:
+        pass
 
 
 #----------------------------------------------------------------------------------------------------------------
@@ -247,6 +254,8 @@ def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(stick_handler, content_types=types.ContentTypes.STICKER)
     dp.register_message_handler(audio_handler, content_types=types.ContentTypes.AUDIO)
     dp.register_message_handler(video_note_handler, content_types=types.ContentTypes.VIDEO_NOTE)
+    dp.register_message_handler(message_handler)
+
     # dp.register_message_handler(bot_message)
     # )
 
