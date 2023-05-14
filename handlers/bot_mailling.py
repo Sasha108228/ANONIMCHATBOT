@@ -16,7 +16,7 @@ async def start_mailling(message: types.Message):
 # @dp.message_handler(ISPrivate(), state=FCMAiling.text, chat_id=admins)
 async def mailling_text(message: types.Message, state: FSMContext):
 	answer = message.text
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Добавить фотографию', callback_data='add_photo'),
@@ -56,7 +56,7 @@ async def mailling_photo(message: types.Message, state: FSMContext):
 	data = await state.get_data()
 	text = data.get('text')
 	photo = data.get('photo')
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Далее', callback_data='next'),
@@ -82,7 +82,7 @@ async def start_p(call: types.CallbackQuery, state: FSMContext):
 
 # @dp.message_handler(ISPrivate(), state=FCMAiling.photo)
 async def no_photo(message: types.Message):
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Отменить', callback_data='quit')
