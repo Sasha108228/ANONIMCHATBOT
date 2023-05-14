@@ -15,7 +15,7 @@ async def start_mailling(message: types.Message):
 # @dp.message_handler(ISPrivate(), state=FCMAilingK1.text, chat_id=admins)
 async def mailling_text(message: types.Message, state: FSMContext):
 	answer = message.text
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Добавить кнопку', callback_data='button'),
@@ -48,7 +48,7 @@ async def button(message: types.Message, state: FSMContext):
 	# 										InlineKeyboardButton(text='Отменить', callback_data='quit')
 	# 									]
 	# 								])
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 								inline_keyboard=[
 									[
 										InlineKeyboardButton(text='Добавить фотографию', callback_data='add_photo'),
@@ -92,7 +92,7 @@ async def nex(call: types.CallbackQuery, state: FSMContext):
 	button_name = data.get('button_name')
 	button_url = data.get('button_url')
 
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Добавить фотографию', callback_data='add_photo'),
@@ -101,7 +101,7 @@ async def nex(call: types.CallbackQuery, state: FSMContext):
 										]
 									])
 
-	mark = InlineKeyboardMarkup(row_width=2,
+	mark = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text=button_name, url=f'{button_url}')
@@ -154,14 +154,14 @@ async def mailling_photo(message: types.Message, state: FSMContext):
 	photo = data.get('photo')
 	button_name = data.get('button_name')
 	button_url = data.get('button_url')
-	mark = InlineKeyboardMarkup(row_width=2,
+	mark = InlineKeyboardMarkup(row_width=1,
 										inline_keyboard=[
 											[
 												InlineKeyboardButton(text=button_name, url=f'{button_url}')
 											]
 										])
 	await message.answer(text=text, reply_markup=mark)
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Далее', callback_data='next'),
@@ -181,7 +181,7 @@ async def start_p(call: types.CallbackQuery, state: FSMContext):
 	button_url = data.get('button_url')
 	await state.finish()
 
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Далее', callback_data='next'),
@@ -189,7 +189,7 @@ async def start_p(call: types.CallbackQuery, state: FSMContext):
 										]
 									])
 
-	mark = InlineKeyboardMarkup(row_width=2,
+	mark = InlineKeyboardMarkup(row_width=1,
 										inline_keyboard=[
 											[
 												InlineKeyboardButton(text=button_name, url=f'{button_url}')
@@ -205,7 +205,7 @@ async def start_p(call: types.CallbackQuery, state: FSMContext):
 
 # @dp.message_handler(ISPrivate(), state=FCMAilingK1.photo)
 async def no_photo(message: types.Message):
-	markup = InlineKeyboardMarkup(row_width=2,
+	markup = InlineKeyboardMarkup(row_width=1,
 									inline_keyboard=[
 										[
 											InlineKeyboardButton(text='Отменить', callback_data='quit')
