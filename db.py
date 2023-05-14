@@ -1,17 +1,9 @@
-import sqlite3
-import os.path
-
-# Ищем путь до файла и ставим полный путь, в место относительного
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_dir = (BASE_DIR + '\\database.db')
+﻿import sqlite3
 
 class Database:
-    # def __init__(self, db_file):
-    #     self.connection = sqlite3.connect(db_file)
-    #     self.cursor = self.connection.cursor()
 
     def __init__(self):
-        self.connection = sqlite3.connect(db_dir)
+        self.connection = sqlite3.connect('database.db')
         self.cursor = self.connection.cursor()
         self.name = ' '
 
