@@ -1,9 +1,17 @@
-﻿import sqlite3
+import sqlite3
+import os.path
+
+# Ищем путь до файла и ставим полный путь, в место относительного
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_dir = (BASE_DIR + '\\database.db')
 
 class Database:
+    # def __init__(self, db_file):
+    #     self.connection = sqlite3.connect(db_file)
+    #     self.cursor = self.connection.cursor()
 
     def __init__(self):
-        self.connection = sqlite3.connect('database.db')
+        self.connection = sqlite3.connect(db_dir)
         self.cursor = self.connection.cursor()
         self.name = ' '
 
@@ -139,6 +147,7 @@ class Database:
     def get_top_num_chats(self):
         with self.connection:
             result = self.cursor.execute("SELECT name, num_chats FROM users ORDER BY num_chats DESC").fetchmany(10)
+
             #dict_result = dict(result)
             #return dict_result
             # output_str = ""
@@ -149,6 +158,7 @@ class Database:
             # i=1
             # output_list = ["{0}) {1}: {2}".format(i+1, row[0], row[1]) for row in result]
             # output_str = "\n".join(output_list)
+
             output_str = "\n".join(["{0}) {1}: {2} Диалога/ов".format(i+1, row[0], row[1]) for i, row in enumerate(result)])
             return output_str
 
@@ -259,3 +269,9 @@ class Database:
     def delete_chat(self, user_id):
         with self.connection:
             return self.cursor.execute("DELETE FROM chats WHERE user = ? OR partner = ?", (user_id, user_id))
+
+#----------------------------------------------------------------------------------------------------------------
+
+    def set_data(self, user_id, data):
+        with self.connection:
+            return self.cursor.execute("UPDATE users SET data=? WHERE user_id = ?", (data, user_id,))

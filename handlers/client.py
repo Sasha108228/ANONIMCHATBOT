@@ -1,5 +1,6 @@
 from create_bot import dp, bot, db, check_sub_channels
 from keyboards import client_btn as nav
+from keyboards import main_btn as navs
 from keyboards import rate_btn as rate
 import config as con
 from aiogram import types, Dispatcher
@@ -19,7 +20,7 @@ from aiogram.dispatcher import FSMContext
 
 #----------------------------------------------------------------------------------------------------------------
 
-# @dp.message_handler(lambda message: message.text == "Искаль партёра 🔍")
+# @dp.message_handler(lambda message: message.text == "Искаль партнёра 🔍")
 async def find__partner(message: types.Message):
     if message.chat.type == 'private':
         if(not db.get_block(message.from_user.id)):
@@ -28,7 +29,7 @@ async def find__partner(message: types.Message):
             if db.create_chat(message.from_user.id, partner) is False:
                 db.add_queue(message.from_user.id)
 
-                await message.answer("Поиск парнёра...", reply_markup=nav.stop_searching)
+                await message.answer("Поиск партнёра...", reply_markup=nav.stop_searching)
 
             else:
                 num_chats_p = db.get_num_chats(partner)
@@ -102,26 +103,43 @@ async def process_callback_rating(callback_query: types.CallbackQuery, state: FS
 
 
 # @dp.message_handler(lambda message: message.text == "Отключиться 🚫")
+# async def disconnected(message: types.Message):
+#     if message.chat.type == 'private':
+#         if(not db.get_block(message.from_user.id)):
+
+#             chat = db.get_chat(message.from_user.id)
+
+#             if chat:
+
+#                 await message.answer("Вы оключились от чата!", reply_markup=nav.find_partner)
+#                 await bot.send_message(chat[1], "Парнёр отключился!", reply_markup=nav.find_partner)
+
+#                 db.delete_chat(message.from_user.id)
+
+#             else:
+#                 await message.answer("Вы не подключились к чату!")
+#         else:
+#             await bot.send_message(message.from_user.id, "Вы заблокированы!")
+#     else:
+#         await message.answer("Бот работает только в приватных чатах!")
 async def disconnected(message: types.Message):
-    if message.chat.type == 'private':
-        if(not db.get_block(message.from_user.id)):
+    if(not db.get_block(message.from_user.id)):
 
-            chat = db.get_chat(message.from_user.id)
+        chat = db.get_chat(message.from_user.id)
 
-            if chat:
+        if chat:
+            # Logo_menu = open('Images/Logo_menu.png', 'rb')
+            await bot.send_photo(message.from_user.id, caption = 'Вы оключились от чата!', photo = open('Images/quit.png', 'rb'), reply_markup=nav.find_partner)
+            # await message.answer("Вы оключились от чата!", reply_markup = nav.find_partner)
 
-                await message.answer("Вы оключились от чата!", reply_markup=nav.find_partner)
-                await bot.send_message(chat[1], "Парнёр отключился!", reply_markup=nav.find_partner)
+            await bot.send_photo(chat[1], caption = 'Парнёр отключился!', photo = open('Images/quit.png', 'rb'), reply_markup=nav.find_partner)
+            # await bot.send_message(chat[1], "Парнёр отключился!", reply_markup = nav.find_partner)
+            db.delete_chat(message.from_user.id)
 
-                db.delete_chat(message.from_user.id)
-
-            else:
-                await message.answer("Вы не подключились к чату!")
         else:
-            await bot.send_message(message.from_user.id, "Вы заблокированы!")
+            await message.answer("Главная", reply_markup=nav.find_partner)
     else:
-        await message.answer("Бот работает только в приватных чатах!")
-
+        await bot.send_message(message.from_user.id, "Вы заблокированы!")
 
 #----------------------------------------------------------------------------------------------------------------
 
@@ -139,6 +157,59 @@ async def stop_searching(message: types.Message):
         await message.answer("Бот работает только в приватных чатах!")
 
 #----------------------------------------------------------------------------------------------------------------
+
+# @dp.callback_query_handler(text='top_num_chats')
+async def top_num_chats(callback_query: types.CallbackQuery):
+    if db.get_block(callback_query.from_user.id) == 0:
+
+        # await bot.answer_callback_query(callback_query.id)
+#         await bot.send_message(callback_query.from_user.id, f"""Топ пользователей:
+# {db.get_top_num_chats()}
+#             """)
+
+        await bot.send_photo(callback_query.from_user.id, caption = f"""Топ пользователей:
+{db.get_top_num_chats()}""", photo = open('Images/rating.png', 'rb'))
+
+
+    else:
+        await bot.send_message(message.from_user.id, "Вы заблокированы!")
+
+#----------------------------------------------------------------------------------------------------------------
+
+# @dp.callback_query_handler(text='questionnaire')
+async def questionnaire(callback_query: types.CallbackQuery):
+    if db.get_block(callback_query.from_user.id) == 0:
+
+        # await bot.answer_callback_query(callback_query.id)
+#         await bot.send_message(callback_query.from_user.id, f"""📝 Ваша анкета:
+
+# 🙆‍♂️Имя: {db.get_name(callback_query.from_user.id)}
+# 🔞 Возраст: {db.get_age(callback_query.from_user.id)}
+# 💬 О себе: {db.get_text(callback_query.from_user.id)}
+# 🚻 Пол: {db.get_gender(callback_query.from_user.id)}
+
+# ⭐️ Рейтинг:
+# 👍 Лайки: {db.get_like(callback_query.from_user.id)}
+# 👎 Дизлайки: {db.get_dislike(callback_query.from_user.id)}
+# 💬 Количество диалогов: {db.get_num_chats(callback_query.from_user.id)}
+# """, reply_markup = navs.questionnaire)
+
+
+        await bot.send_photo(callback_query.from_user.id, caption = f"""📝 Ваша анкета:
+
+🙆‍♂️Имя: {db.get_name(callback_query.from_user.id)}
+🔞 Возраст: {db.get_age(callback_query.from_user.id)}
+💬 О себе: {db.get_text(callback_query.from_user.id)}
+🚻 Пол: {db.get_gender(callback_query.from_user.id)}
+
+⭐️ Рейтинг:
+👍 Лайки: {db.get_like(callback_query.from_user.id)}
+👎 Дизлайки: {db.get_dislike(callback_query.from_user.id)}
+💬 Количество диалогов: {db.get_num_chats(callback_query.from_user.id)}
+""", photo = open('Images/profile.png', 'rb'), reply_markup=navs.questionnaire)
+
+    else:
+        await bot.send_message(message.from_user.id, "Вы заблокированы!")
 
 
 #----------------------------------------------------------------------------------------------------------------
@@ -243,9 +314,11 @@ def register_handlers_client(dp: Dispatcher):
 
     dp.register_callback_query_handler(process_callback_rating, lambda c: c.data in ['like', 'dislike'])
 
-    dp.register_message_handler(find__partner, lambda message: message.text == "Искаль партёра 🔍")
+    dp.register_message_handler(find__partner, lambda message: message.text == "Искать партнёра 🔍")
     dp.register_message_handler(disconnected, lambda message: message.text == "Отключиться 🚫")
     dp.register_message_handler(stop_searching, lambda message: message.text == "Остановить поиск ❌")
+    dp.register_message_handler(top_num_chats, lambda message: message.text == "Топ пользователей 📊")
+    dp.register_message_handler(questionnaire, lambda message: message.text == "Моя анкета 📖")
 
     dp.register_message_handler(voice_handler, content_types=types.ContentTypes.VOICE)
     dp.register_message_handler(photo_handler, content_types=types.ContentTypes.PHOTO)

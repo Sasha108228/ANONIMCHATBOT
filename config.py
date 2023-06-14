@@ -19,7 +19,9 @@ admins = [
 # Каналы на каторые нужно быть подписанными ['Имя, которое будет выводиться на кнопке', 'ID канала', 'ссылка на канал']
 # Бот должен быть админом в этих каналах, чтобы проверить наличие подписки
 CHANNELS = [
-	['Channel 1', '-1001734480359', 'https://t.me/Armenian_Sasha']
+	['Channel 1', '-1001700620866', 'https://t.me/ulsksale']
+	# ['Channel 1', '-1001734480359', 'https://t.me/Armenian_Sasha']
+
 ]
 
 #----------------------------------------------------------------------------------------------------------------
@@ -30,15 +32,17 @@ NOT_SUB_MESSAGE = 'You not subscribe channels!'
 
 
 def questionnaire(variable):
-	questionnaire_text = f"""Анкета собеседника:
-Имя: {db.get_name(variable)}
-Возраст: {db.get_age(variable)}
-Текст: {db.get_text(variable)}
-Пол: {db.get_gender(variable)}
-Рейтинг:
-Лайки👍: {db.get_like(variable)}
-Дизлайки👎: {db.get_dislike(variable)}
-Количество диалогов: {db.get_num_chats(variable)}
+	questionnaire_text = f"""📝 Анкета собеседника:
+
+🙆‍♂️Имя: {db.get_name(variable)}
+🔞 Возраст: {db.get_age(variable)}
+💬 О себе: {db.get_text(variable)}
+🚻 Пол: {db.get_gender(variable)}
+
+⭐️ Рейтинг:
+👍 Лайки: {db.get_like(variable)}
+👎 Дизлайки: {db.get_dislike(variable)}
+💬 Количество диалогов: {db.get_num_chats(variable)}
 """
 	return questionnaire_text
 

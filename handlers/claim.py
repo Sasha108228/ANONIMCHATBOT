@@ -14,8 +14,10 @@ async def claim(message: types.Message):
     if(not db.get_block(message.from_user.id)):
         chat = db.get_chat(message.from_user.id)
 
-        await message.answer("""Введите причину жалобы! \n
-    или выберите из перечисленного""", reply_markup=nav.claim)
+        # await message.answer("""Введите причину жалобы или выберите из перечисленного!""", reply_markup=nav.claim)
+        await bot.send_photo(message.from_user.id, caption = 'Введите причину жалобы или выберите из перечисленного!', photo = open('Images/report.png', 'rb'), reply_markup=nav.claim)
+
+
         await FCMClaim.text.set()
 
     else:
@@ -23,16 +25,8 @@ async def claim(message: types.Message):
 # @dp.message_handler(ISPrivate(), state=FCMClaim.text)
 async def claim_text(message: types.Message, state: FSMContext):
     answer = message.text
-    markup = InlineKeyboardMarkup(row_width=2,
-                                    inline_keyboard=[
-                                        [
-                                            InlineKeyboardButton(text='Добавить фотографию', callback_data='add_photo'),
-                                            InlineKeyboardButton(text='Далее', callback_data='next'),
-                                            InlineKeyboardButton(text='Отменить', callback_data='quit')
-                                        ]
-                                    ])
     await state.update_data(text=answer)
-    await message.answer(text=answer, reply_markup=markup)
+    await message.answer(text=answer, reply_markup=nav.markup)
     await FCMClaim.state.set()
 
 # @dp.calback_query_handler(text='next', state=FCMClaim.state)
