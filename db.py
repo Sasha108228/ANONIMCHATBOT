@@ -6,7 +6,7 @@ class Database:
     #     self.cursor = self.connection.cursor()
 
     def __init__(self):
-        self.connection = sqlite3.connect(database.db)
+        self.connection = sqlite3.connect('database.db')
         self.cursor = self.connection.cursor()
         self.name = ' '
 
