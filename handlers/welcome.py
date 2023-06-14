@@ -79,7 +79,7 @@ async def load_age(message: types.Message, state: FSMContext):
                 age = "0"
                 data['age'] = age
                 # await message.reply("Был указан некорректный возраст. Установлен возраст '0'.")
-            elif len(formatted_text) > 3:
+            elif len(age) > 3:
                 await bot.send_photo(message.from_user.id, caption = "Был указан некорректный возраст. Установлен возраст '0'.", photo = open('Images/404.png', 'rb'))
                 age = "0"
                 data['age'] = age
