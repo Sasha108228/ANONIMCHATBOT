@@ -74,7 +74,7 @@ async def load_age(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         age = (message.text) if message.text.isdigit() else None
         if age is not None:
-            if age < 0 or age > 120:
+            if int(age) < 0 or int(age) > 120:
                 await bot.send_photo(message.from_user.id, caption = "Был указан некорректный возраст. Установлен возраст '0'.", photo = open('Images/404.png', 'rb'))
                 age = "0"
                 data['age'] = age
